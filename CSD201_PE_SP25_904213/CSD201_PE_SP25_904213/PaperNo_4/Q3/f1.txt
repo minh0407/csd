@@ -1,0 +1,2 @@
+  F  C  A  H  B  D  E  I  G
+  C(3)  D(3)  E(2)  F(1)  G(1)  H(2)
