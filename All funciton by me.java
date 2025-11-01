@@ -108,6 +108,63 @@ class LinkedList {
     cur.next = cur.next.next;
   }
 
+  // find max min
+  Node findMax() {
+    if (isEmpty()) return null;
+    Node maxNode = head;
+    Node cur = head.next;
+    while (cur != null) {
+        if (cur.info.value > maxNode.info.value) {
+            maxNode = cur;
+        }
+        cur = cur.next;
+    }
+    return maxNode;
+}
+
+Node findMin() {
+    if (isEmpty()) return null;
+    Node minNode = head;
+    Node cur = head.next;
+    while (cur != null) {
+        if (cur.info.value < minNode.info.value) {
+            minNode = cur;
+        }
+        cur = cur.next;
+    }
+    return minNode;
+}
+
+  //swapp
+  void swap(Node a, Node b) {
+    // Nếu danh sách rỗng hoặc hai node giống nhau → không làm gì
+    if (a == null || b == null || a == b) return;
+
+    // Trường hợp đặc biệt: hoán đổi head hoặc tail
+    if (a == head) head = b;
+    else if (b == head) head = a;
+
+    if (a == tail) tail = b;
+    else if (b == tail) tail = a;
+
+    // Tìm node đứng trước a và b
+    Node prevA = null, prevB = null, cur = head;
+    while (cur != null && (prevA == null || prevB == null)) {
+        if (cur.next == a) prevA = cur;
+        if (cur.next == b) prevB = cur;
+        cur = cur.next;
+    }
+
+    // Cập nhật liên kết trước các node
+    if (prevA != null) prevA.next = b;
+    if (prevB != null) prevB.next = a;
+
+    // Hoán đổi next pointer của hai node
+    Node temp = a.next;
+    a.next = b.next;
+    b.next = temp;
+}
+
   // Get node followed by index
   Node pos(int k) {
     int i = 1;
@@ -685,3 +742,4 @@ class Graph {
     f.writeBytes("\r\n");
   }
 }
+
