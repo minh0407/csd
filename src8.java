@@ -161,66 +161,62 @@ addAfterIndex( z , 4);
     f.close();
   }   
     void findMax() {
-    if (isEmpty()) return;
-    if(size()<3) return ;
-    int count = 0;
-    Node maxNode = head;
-    Node cur = head.next;
-    while (cur != null) {
-      
-        if (cur.info.color > maxNode.info.color) {
-            maxNode = cur;
-        }
-        cur = cur.next;
-       
+  if (isEmpty() || head.next == null) return; // <2 phần tử thì thôi
+
+  // 1) Tìm node có color max (ưu tiên node xuất hiện sớm nhất)
+  Node maxNode = head;
+  for (Node cur = head.next; cur != null; cur = cur.next) {
+    if (cur.info.color > maxNode.info.color) {
+      maxNode = cur;
     }
-  Node p = maxNode ;
-  p.info = maxNode.info;
-  
-   delete(maxNode);
-   addAfterIndex(p.info,0);
-}
-    void delete(Node q) {
-    if (isEmpty() || q == null) return;
-    if (q == head) {
-      deleteFirst();
-      return;
-    }
-    Node f = head;
-    while (f != null && f.next != q) f = f.next;
-    if (f == null) return;
-    Node q1 = q.next;
-    f.next = q1;
-    if (f.next == null){ tail = f;q.next = null;}
-  }
-      void deleteLast() {
-    if (isEmpty()) {
-      System.out.println("Empty list!");
-      return;
-    }
-    if (head.next == null) {
-      head = null;
-    }
-    Node cur = head;
-    while (cur.next.next != null) {
-      cur = cur.next;
-    }
-    cur.next = null;
-    tail = cur;
   }
 
-  // Delete first node
-  void deleteFirst() {
-    if (isEmpty()) {
-      System.out.println("Empty list!");
-      return;
-    }
-    if (head.next == null) {
-      head = null;
-    }
-    Node cur = head;
-    head = cur.next;
+  // 2) Copy dữ liệu rồi xóa node cũ
+  Bottle copy = new Bottle(maxNode.info.maker, maxNode.info.volume, maxNode.info.color);
+  delete(maxNode);
+
+  // 3) Chèn bản sao ngay sau head
+  Node node = new Node(copy);
+  if (isEmpty()) {                 // trường hợp list chỉ có 1 phần tử và nó là max
+    head = tail = node;
+  } else {
+    node.next = head.next;
+    head.next = node;
+    if (tail == head) tail = node; // nếu trước đó list chỉ có 1 node
   }
+}
+   void deleteFirst() {
+  if (isEmpty()) return;
+  if (head == tail) {          // 1 phần tử
+    head = tail = null;
+    return;
+  }
+  head = head.next;
+}
+
+void deleteLast() {
+  if (isEmpty()) return;
+  if (head == tail) {          // 1 phần tử
+    head = tail = null;
+    return;
+  }
+  Node cur = head;
+  while (cur.next != tail) cur = cur.next;
+  cur.next = null;
+  tail = cur;
+}
+
+void delete(Node q) {
+  if (isEmpty() || q == null) return;
+  if (q == head) { deleteFirst(); return; }
+  if (q == tail) { deleteLast();  return; }
+
+  Node prev = head;
+  while (prev != null && prev.next != q) prev = prev.next;
+  if (prev == null) return;          // không tìm thấy q
+  prev.next = q.next;                 // bỏ q ra khỏi list
+  q.next = null;                      // cắt đuôi cho sạch
+}
 
 //==================================================================
   void f4() throws Exception {
