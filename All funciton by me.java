@@ -220,6 +220,63 @@ Node findMin() {
       pi = pi.next;
   }
 }
+  //sort tang dan 
+  // Sort ascending by color from index 'from' to 'to' (inclusive)
+// If from < 0 or to >= size or from >= to -> do nothing
+public void sortSegment(int from, int to) {
+    if (isEmpty() || from < 0 || to >= size() || from >= to) return;
+
+    // Find start node (at index 'from') and end node (at index 'to')
+    Node startPrev = null;       // node trước start (nếu có)
+    Node start = head;
+    for (int i = 0; i < from && start != null; i++) {
+        startPrev = start;
+        start = start.next;
+    }
+
+    Node end = start;
+    for (int i = from; i < to && end != null; i++) {
+        end = end.next;
+    }
+    if (start == null || end == null) return;
+    Node afterEnd = end.next;    // node sau end (để nối lại sau khi sort)
+
+    // Detach sublist [start..end]
+    end.next = null;
+
+    // Sort sublist ascending by color (simple selection sort)
+    Node sortedHead = start;
+    for (Node p = sortedHead; p != null; p = p.next) {
+        Node minNode = p;
+        for (Node q = p.next; q != null; q = q.next) {
+            if (q.info.color < minNode.info.color)
+                minNode = q;
+        }
+        if (minNode != p) {
+            // swap Bottle info
+            Bottle tmp = p.info;
+            p.info = minNode.info;
+            minNode.info = tmp;
+        }
+    }
+
+    // Reattach the sorted sublist back to main list
+    if (startPrev == null) {
+        head = sortedHead;
+    } else {
+        startPrev.next = sortedHead;
+    }
+
+    // Find new end of sorted sublist to reconnect with afterEnd
+    Node newEnd = sortedHead;
+    while (newEnd.next != null) newEnd = newEnd.next;
+    newEnd.next = afterEnd;
+
+    // If sorted region touched tail, update tail pointer
+    if (afterEnd == null) tail = newEnd;
+}
+
+  
 
   void sort() {
     Node pi, pj;
@@ -741,5 +798,6 @@ class Graph {
     f.writeBytes("\r\n");
   }
 }
+
 
 
