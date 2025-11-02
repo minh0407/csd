@@ -223,6 +223,7 @@ Node findMin() {
   //sort tang dan 
   // Sort ascending by color from index 'from' to 'to' (inclusive)
 // If from < 0 or to >= size or from >= to -> do nothing
+  // phan tu cuoi cua mang la size()-1 
 public void sortSegment(int from, int to) {
     if (isEmpty() || from < 0 || to >= size() || from >= to) return;
 
@@ -798,6 +799,7 @@ class Graph {
     f.writeBytes("\r\n");
   }
 }
+
 
 
 
