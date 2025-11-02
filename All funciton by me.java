@@ -61,33 +61,32 @@ class LinkedList {
 
   // Delete last node
   void deleteLast() {
-    if (isEmpty()) {
-      System.out.println("Empty list!");
-      return;
+       if (isEmpty()) {
+        System.out.println("Empty list!");
+        return;
     }
     if (head.next == null) {
-      head = null;
+        head = tail = null;
+        return;
     }
     Node cur = head;
-    while (cur.next.next != null) {
-      cur = cur.next;
-    }
+    while (cur.next.next != null) cur = cur.next;
     cur.next = null;
     tail = cur;
   }
 
   // Delete first node
-  void deleteFirst() {
+void deleteFirst() {
     if (isEmpty()) {
-      System.out.println("Empty list!");
-      return;
+        System.out.println("Empty list!");
+        return;
     }
     if (head.next == null) {
-      head = null;
+        head = tail = null;
+        return;
     }
-    Node cur = head;
-    head = cur.next;
-  }
+    head = head.next;
+}
 
   // Delete specific node
   void deleteIndex(int index) {
@@ -742,4 +741,5 @@ class Graph {
     f.writeBytes("\r\n");
   }
 }
+
 
