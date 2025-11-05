@@ -163,6 +163,13 @@ Node findMin() {
     a.next = b.next;
     b.next = temp;
 }
+  //swap content
+void swapInfo(Node a, Node b) {
+    if (a == null || b == null || a == b) return;
+    Bottle tmp = a.info;
+    a.info = b.info;
+    b.info = tmp;
+}
 
   // Get node followed by index
   Node pos(int k) {
@@ -799,6 +806,7 @@ class Graph {
     f.writeBytes("\r\n");
   }
 }
+
 
 
 
