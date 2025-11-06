@@ -441,6 +441,24 @@ Node findPostOrderHelper(Node p, int index, int[] count) {
       }
       return null;
     }
+  // tim max tim min trong tree
+  Node findMin(Node p) {
+    if (p == null) return null;
+    Node q = p;
+    while (q.left != null) {   // đi sang trái cho đến khi không còn node con trái
+        q = q.left;
+    }
+    return q; // q là node có giá trị nhỏ nhất
+}
+  Node findMax(Node p) {
+    if (p == null) return null;
+    Node q = p;
+    while (q.right != null) {  // đi sang phải cho đến khi không còn node con phải
+        q = q.right;
+    }
+    return q; // q là node có giá trị lớn nhất
+}
+
 
     void deleteByCopyL(Node p) {
       if (p == null) return;
@@ -861,6 +879,7 @@ class Graph {
     f.writeBytes("\r\n");
   }
 }
+
 
 
 
