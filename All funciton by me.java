@@ -311,6 +311,34 @@ public void sortSegment(int from, int to) {
     tail = t.tail;
   }
 }
+void reverseSegment(int from, int to) {
+    if (head == null || from >= to || from < 0) return;
+
+    Node dummy = new Node(0); 
+    dummy.next = head;
+    Node prev = dummy;
+
+    //  B1: Đi đến node trước vị trí 'from'
+    for (int i = 0; i < from && prev.next != null; i++) {
+        prev = prev.next;
+    }
+
+    // 2️ B2: Bắt đầu đảo đoạn [from..to]
+    Node start = prev.next;       // node đầu của đoạn cần đảo
+    Node then = start.next;       // node ngay sau start
+
+    for (int i = 0; i < to - from && then != null; i++) {
+        start.next = then.next;
+        then.next = prev.next;
+        prev.next = then;
+        then = start.next;
+    }
+
+    // 3️ B3: Cập nhật head & tail nếu cần
+    if (from == 0) head = prev.next;
+    if (start.next == null) tail = start;
+}
+
 
 // Tree
 class BSTree {
@@ -421,17 +449,19 @@ Node findPostOrderHelper(Node p, int index, int[] count) {
       visit(node);
     }
   }
+  //tim cha
+Node getParentByTraversal(Node child) {
+    if (child == null || root == null || child == root) return null;
+    return findParentDFS(root, child);
+}
 
-  Node getParent(Node p) {
-    if (p == root) return null;
-    Node father = null, cu = root;
-    while (cu != null && cu.info.value != p.info.value) {
-      father = cu;
-      if (cu.info.value < p.info.value) cu = cu.right; else cu = cu.left;
-    }
-    if (cu == null) return null;
-    return father;
-  }
+Node findParentDFS(Node cur, Node child) {
+    if (cur == null) return null;
+    if (cur.left == child || cur.right == child) return cur;
+    Node t = findParentDFS(cur.left, child);
+    if (t != null) return t;
+    return findParentDFS(cur.right, child);
+}
 
     Node findNode(int key) {
       Node cu = root;
@@ -558,18 +588,22 @@ Node findPostOrderHelper(Node p, int index, int[] count) {
       else father.right = p.left;
     }
 
-  void rotateRight(Node p) {
+void rotateRightWithParent(Node p) {
     if (p == null || p.left == null) return;
+    Node parent = getParentByTraversal(p); // tìm cha bằng duyệt cây (không giả định BST)
+
     Node c = p.left;
     p.left = c.right;
     c.right = p;
-    Node father = getParent(p);
-    if (father == null) root = c;
-    else {
-      if (father.info.value > p.info.value) father.left = c;
-      else father.right = c;
+
+    if (parent == null) {            // p là root
+        root = c;
+    } else if (parent.left == p) {
+        parent.left = c;
+    } else {
+        parent.right = c;
     }
-  }
+}
 
   void rotateLeft(Node p) {
     if (p == null || p.right == null) return;
@@ -618,6 +652,40 @@ Node findPostOrderHelper(Node p, int index, int[] count) {
     }
   }
 }
+
+//neu chi can lay size thi lay cai nao cung duoc
+int sizePreOrder(Node p) {
+    if (p == null) return 0;
+    return 1 + sizePreOrder(p.left) + sizePreOrder(p.right);
+}
+
+int sizeInOrder(Node p) {
+    if (p == null) return 0;
+    return sizeInOrder(p.left) + 1 + sizeInOrder(p.right);
+}
+
+int sizePostOrder(Node p) {
+    if (p == null) return 0;
+    return sizePostOrder(p.left) + sizePostOrder(p.right) + 1;
+}
+
+int sizeBreadthFirst(Node p) {
+    if (p == null) return 0;
+    Node[] q = new Node[1000];
+    int front = 0, rear = 0, count = 0;
+    q[rear++] = p;
+    while (front < rear) {
+        Node cur = q[front++];
+        count++;
+        if (cur.left != null) q[rear++] = cur.left;
+        if (cur.right != null) q[rear++] = cur.right;
+    }
+    return count;
+}
+
+
+
+
 //Tìm node con ngoài cùng bên phải của cây con bên trái 
 Node findRightMostOfLeftSubtree(Node p) {
   if (p == null || p.left == null) {
@@ -879,6 +947,7 @@ class Graph {
     f.writeBytes("\r\n");
   }
 }
+
 
 
 
