@@ -354,7 +354,62 @@ class BSTree {
     visit(p);
     inOrder(p.right);
   }
+  // tim node o vi tri 
+  //pre
+Node findPreOrder(Node p, int index) {
+    // trả về node tại vị trí index trong preorder (0-based)
+    return findPreOrderHelper(p, index, new int[]{0});
+}
 
+Node findPreOrderHelper(Node p, int index, int[] count) {
+    if (p == null) return null;
+
+    if (count[0] == index) return p; // kiểm tra node hiện tại
+    count[0]++;
+
+    Node res = findPreOrderHelper(p.left, index, count);
+    if (res != null) return res;
+    return findPreOrderHelper(p.right, index, count);
+}
+//in
+  
+Node findInOrder(Node p, int index) {
+    return findInOrderHelper(p, index, new int[]{0});
+}
+
+Node findInOrderHelper(Node p, int index, int[] count) {
+    if (p == null) return null;
+
+    Node res = findInOrderHelper(p.left, index, count);
+    if (res != null) return res;
+
+    if (count[0] == index) return p;
+    count[0]++;
+
+    return findInOrderHelper(p.right, index, count);
+}
+  
+//post
+  Node findPostOrder(Node p, int index) {
+    return findPostOrderHelper(p, index, new int[]{0});
+}
+
+Node findPostOrderHelper(Node p, int index, int[] count) {
+    if (p == null) return null;
+
+    Node res = findPostOrderHelper(p.left, index, count);
+    if (res != null) return res;
+
+    res = findPostOrderHelper(p.right, index, count);
+    if (res != null) return res;
+
+    if (count[0] == index) return p;
+    count[0]++;
+    return null;
+}
+  
+
+  
   void BreathFirstOrder(Node p) throws Exception {
     Queue queue = new Queue();
     if (isEmpty()) return;
@@ -806,6 +861,7 @@ class Graph {
     f.writeBytes("\r\n");
   }
 }
+
 
 
 
